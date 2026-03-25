@@ -661,17 +661,11 @@ async function saveConfig() {
   const btn = document.getElementById('cfgSaveBtn');
   btn.disabled = true; btn.textContent = '테스트 중…';
   try {
-    // Step 1: Test basic connectivity
+        // Step 1: Test basic connectivity (use table endpoint, not schema root which requires service_role)
     const headers = { 'Content-Type': 'application/json', 'apikey': key, 'Authorization': 'Bearer ' + key };
-    const r = await fetch(`${url}/rest/v1/`, { headers });
-    if (r.status === 401) throw new Error('Key가 잘못되었습니다. Publishable key를 확인하세요 (sb_publishable_...)');
-    if (r.status === 404) throw new Error('URL이 잘못되었습니다. https://xxxx.supabase.co 형식인지 확인하세요');
-    if (!r.ok && r.status !== 400) {
-      const body = await r.text();
-      throw new Error(`연결 실패 (${r.status}): ${body.slice(0,100)}`);
-    }
-    // Step 2: Check if our table exists
+    // Step 2: Check if our table exists (also serves as connectivity test)
     const r2 = await fetch(`${url}/rest/v1/inventory_survey?limit=1`, { headers });
+    if (r2.status === 401) throw new Error('Key가 잘못되었습니다. Legacy anon key 또는 Publishable key를 확인하세요');
     if (r2.status === 404 || r2.status === 400) {
       // Table doesn't exist — still save config but warn
       SB_URL = url; SB_KEY = key;
