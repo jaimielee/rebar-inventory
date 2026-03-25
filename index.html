@@ -7,7 +7,7 @@
 <style>
 :root {
   --ink:        oklch(22% 0.04 170);
-  --ink-2:      oklch(40% 0.04 170);
+  --ink-2:      oklch(40% 0.04 170)
   --ink-3:      oklch(58% 0.03 170);
   --ink-4:      oklch(72% 0.02 170);
   --ink-5:      oklch(84% 0.015 170);
@@ -640,6 +640,7 @@ async function sbDelete(table, id) {
 }
 
 function isConfigured() { return SB_URL && SB_KEY; }
+  if (isConfigured()) document.getElementById('configOverlay').style.display = 'none';
 
 // ══════════════════════════════════════════════════════
 // CONFIG MODAL
